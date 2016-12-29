@@ -15,6 +15,7 @@ Date: 2016-12-29 17:50:10
 
 SET FOREIGN_KEY_CHECKS=0;
 
+
 -- ----------------------------
 -- Table structure for t_article
 -- ----------------------------
