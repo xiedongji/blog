@@ -1,29 +1,33 @@
 <?php
 namespace app\mgr\controller;
 
-use app\mgr\model\AuthGroup as AuthGroupModel;
-use app\mgr\model\SysUser as SysUserModel;
+use app\common\model\AuthGroup as AuthGroupModel;
+use app\common\model\AuthRule as AuthRuleModel;
+use app\common\controller\AdminBase;
 
 /**
  * 权限组
  * Class AuthGroup
- * @package app\mgr\controller
+ * @package app\admin\controller
  */
-class AuthGroup extends BaseMgr {
+class AuthGroup extends AdminBase
+{
     protected $auth_group_model;
     protected $auth_rule_model;
 
-    protected function _initialize() {
+    protected function _initialize()
+    {
         parent::_initialize();
         $this->auth_group_model = new AuthGroupModel();
-        $this->auth_rule_model  = new SysUserModel();
+        $this->auth_rule_model  = new AuthRuleModel();
     }
 
     /**
      * 权限组
      * @return mixed
      */
-    public function index() {
+    public function index()
+    {
         $auth_group_list = $this->auth_group_model->select();
 
         return $this->fetch('index', ['auth_group_list' => $auth_group_list]);
@@ -33,14 +37,16 @@ class AuthGroup extends BaseMgr {
      * 添加权限组
      * @return mixed
      */
-    public function add() {
+    public function add()
+    {
         return $this->fetch();
     }
 
     /**
      * 保存权限组
      */
-    public function save() {
+    public function save()
+    {
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -57,7 +63,8 @@ class AuthGroup extends BaseMgr {
      * @param $id
      * @return mixed
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $auth_group = $this->auth_group_model->find($id);
 
         return $this->fetch('edit', ['auth_group' => $auth_group]);
@@ -67,11 +74,12 @@ class AuthGroup extends BaseMgr {
      * 更新权限组
      * @param $id
      */
-    public function update($id) {
+    public function update($id)
+    {
         if ($this->request->isPost()) {
             $data = $this->request->post();
 
-            if($id == 1 && $data['status'] != 1){
+            if ($id == 1 && $data['status'] != 1) {
                 $this->error('超级管理组不可禁用');
             }
             if ($this->auth_group_model->save($data, $id) !== false) {
@@ -86,8 +94,9 @@ class AuthGroup extends BaseMgr {
      * 删除权限组
      * @param $id
      */
-    public function delete($id) {
-        if($id == 1){
+    public function delete($id)
+    {
+        if ($id == 1) {
             $this->error('超级管理组不可删除');
         }
         if ($this->auth_group_model->destroy($id)) {
@@ -102,7 +111,8 @@ class AuthGroup extends BaseMgr {
      * @param $id
      * @return mixed
      */
-    public function auth($id) {
+    public function auth($id)
+    {
         return $this->fetch('auth', ['id' => $id]);
     }
 
@@ -111,7 +121,8 @@ class AuthGroup extends BaseMgr {
      * @param $id
      * @return mixed
      */
-    public function getJson($id) {
+    public function getJson($id)
+    {
         $auth_group_data = $this->auth_group_model->find($id)->toArray();
         $auth_rules      = explode(',', $auth_group_data['rules']);
         $auth_rule_list  = $this->auth_rule_model->field('id,pid,title')->select();
@@ -128,7 +139,8 @@ class AuthGroup extends BaseMgr {
      * @param $id
      * @param $auth_rule_ids
      */
-    public function updateAuthGroupRule($id, $auth_rule_ids = '') {
+    public function updateAuthGroupRule($id, $auth_rule_ids = '')
+    {
         if ($this->request->isPost()) {
             if ($id) {
                 $group_data['id']    = $id;

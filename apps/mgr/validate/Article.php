@@ -3,7 +3,8 @@ namespace app\mgr\validate;
 
 use think\Validate;
 
-class Article extends Validate {
+class Article extends Validate
+{
     protected $rule = [
         'cid'   => 'require',
         'title' => 'require',

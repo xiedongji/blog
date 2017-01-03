@@ -9,14 +9,16 @@ use think\Session;
 /**
  * 后台登录
  * Class Login
- * @package app\mgr\controller
+ * @package app\admin\controller
  */
-class Login extends Controller {
+class Login extends Controller
+{
     /**
      * 后台登录
      * @return mixed
      */
-    public function index() {
+    public function index()
+    {
         return $this->fetch();
     }
 
@@ -24,19 +26,20 @@ class Login extends Controller {
      * 登录验证
      * @return string
      */
-    public function login() {
-
-        if($this->request->isPost()){
-            $data            = $this->request->only(['username', 'password']);
+    public function login()
+    {
+        if ($this->request->isPost()) {
+            $data            = $this->request->only(['username', 'password', 'verify']);
             $validate_result = $this->validate($data, 'Login');
 
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
                 $where['username'] = $data['username'];
-                // $where['password'] = md5($data['password'] . Config::get('salt'));
+                $where['password'] = md5($data['password'] . Config::get('salt'));
 
                 $admin_user = Db::name('admin_user')->field('id,username,status')->where($where)->find();
+
                 if (!empty($admin_user)) {
                     if ($admin_user['status'] != 1) {
                         $this->error('当前用户已禁用');
@@ -45,9 +48,9 @@ class Login extends Controller {
                         Session::set('admin_name', $admin_user['username']);
                         Db::name('admin_user')->update(
                             [
-                                'id'              => $admin_user['id'],
                                 'last_login_time' => date('Y-m-d H:i:s', time()),
                                 'last_login_ip'   => $this->request->ip(),
+                                'id'              => $admin_user['id']
                             ]
                         );
                         $this->success('登录成功', 'mgr/index/index');
@@ -62,7 +65,8 @@ class Login extends Controller {
     /**
      * 退出登录
      */
-    public function logout() {
+    public function logout()
+    {
         Session::delete('admin_id');
         Session::delete('admin_name');
         $this->success('退出成功', 'mgr/login/index');

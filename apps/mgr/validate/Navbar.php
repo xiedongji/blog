@@ -3,7 +3,8 @@ namespace app\mgr\validate;
 
 use think\Validate;
 
-class Navbar extends Validate {
+class Navbar extends Validate
+{
     protected $rule = [
         'pid'  => 'require',
         'name' => 'require',

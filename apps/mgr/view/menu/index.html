@@ -1,4 +1,5 @@
-{extend name="base" /} {block name="body"}
+{extend name="base" /}
+{block name="body"}
 <div class="layui-body">
     <!--tab标签-->
     <div class="layui-tab layui-tab-brief">
@@ -8,34 +9,32 @@
         </ul>
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
-                <a href="{:url('mgr/menu/indexRoot')}" class="layui-btn layui-btn-small">只显示一级菜单</a>
                 <table class="layui-table">
                     <thead>
-                        <tr>
-                            <th style="width: 30px;">ID</th>
-                            <th style="width: 30px;">排序</th>
-                            <th>菜单名称</th>
-                            <th>控制器方法</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
+                    <tr>
+                        <th style="width: 30px;">ID</th>
+                        <th style="width: 30px;">排序</th>
+                        <th>菜单名称</th>
+                        <th>控制器方法</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {foreach name="admin_menu_level_list" item="vo"}
-                        <tr>
-                            <td>{$vo.id}</td>
-                            <td>{$vo.sort}</td>
-                            <td>{neq name="vo.level" value="1"}|{php}for($i=1;$i
-                                <$vo[ 'level'];$i++){echo ' ----';}{/php}{/neq} {$vo.title}</td>
-                                    <td>{$vo.name}</td>
-                                    <td>{php}echo $vo['status']==1 ? '显示' : '隐藏';{/php}</td>
-                                    <td>
-                                        <a href="{:url('mgr/menu/add',['pid'=>$vo['id']])}" class="layui-btn layui-btn-mini">添加子菜单</a>
-                                        <a href="{:url('mgr/menu/edit',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-mini">编辑</a>
-                                        <a href="{:url('mgr/menu/delete',['id'=>$vo['id']])}" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
-                                    </td>
-                        </tr>
-                        {/foreach}
+                    {foreach name="admin_menu_level_list" item="vo"}
+                    <tr>
+                        <td>{$vo.id}</td>
+                        <td>{$vo.sort}</td>
+                        <td>{neq name="vo.level" value="1"}|{php}for($i=1;$i<$vo['level'];$i++){echo ' ----';}{/php}{/neq} {$vo.title}</td>
+                        <td>{$vo.name}</td>
+                        <td>{php}echo $vo['status']==1 ? '显示' : '隐藏';{/php}</td>
+                        <td>
+                            <a href="{:url('mgr/menu/add',['pid'=>$vo['id']])}" class="layui-btn layui-btn-mini">添加子菜单</a>
+                            <a href="{:url('mgr/menu/edit',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-mini">编辑</a>
+                            <a href="{:url('mgr/menu/delete',['id'=>$vo['id']])}" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
+                        </td>
+                    </tr>
+                    {/foreach}
                     </tbody>
                 </table>
             </div>

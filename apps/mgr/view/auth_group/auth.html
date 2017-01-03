@@ -1,6 +1,6 @@
 {extend name="base" /}
 {block name="css"}
-<link rel="stylesheet" href="/static/css/ztree-metro-style.css">
+<link rel="stylesheet" href="__CSS__/ztree-metro-style.css">
 {/block}
 {block name="body"}
 <div class="layui-body">
@@ -22,7 +22,7 @@
 </div>
 {/block}
 {block name="js"}
-<script src="/public/static/js/jquery.ztree.all.min.js"></script>
+<script src="__JS__/jquery.ztree.all.min.js"></script>
 {/block}
 {block name="script"}
 <script>
@@ -59,7 +59,7 @@
         };
 
         $.ajax({
-            url: "/index.php/mgr/auth_group/getJson",
+            url: "{:url('mgr/auth_group/getJson')}",
             type: "post",
             dataType: "json",
             cache: false,
@@ -81,7 +81,7 @@
                 auth_rule_ids.push(item.id);
             });
             $.ajax({
-                url: "/index.php/mgr/auth_group/updateAuthGroupRule",
+                url: "{:url('mgr/auth_group/updateAuthGroupRule')}",
                 type: "post",
                 cache: false,
                 data: {

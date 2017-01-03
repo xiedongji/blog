@@ -25,7 +25,7 @@ class SimonCmd extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $output->writeln("You can write your shell in here...");
+        $output->writeln("You can write your shell in here...From Simon ^_^!");
     }
 
 }

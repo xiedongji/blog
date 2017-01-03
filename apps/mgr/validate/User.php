@@ -3,7 +3,8 @@ namespace app\mgr\validate;
 
 use think\Validate;
 
-class User extends Validate {
+class User extends Validate
+{
     protected $rule = [
         'username'         => 'require|unique:user',
         'password'         => 'confirm:confirm_password',

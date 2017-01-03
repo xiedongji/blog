@@ -3,9 +3,15 @@ namespace app\mgr\validate;
 
 use think\Validate;
 
-class SysUser extends Validate {
+/**
+ * 管理员验证器
+ * Class AdminUser
+ * @package app\admin\validate
+ */
+class SysUser extends Validate
+{
     protected $rule = [
-        'username'         => 'require|unique:sys_user',
+        'username'         => 'require|unique:admin_user',
         'password'         => 'confirm:confirm_password',
         'confirm_password' => 'confirm:password',
         'status'           => 'require',

@@ -1,10 +1,13 @@
 <?php
 namespace app\index\controller;
 
-class Index
+use app\common\controller\HomeBase;
+use think\Db;
+
+class Index extends HomeBase
 {
     public function index()
     {
-        return 'this is cms home index';
+        return $this->fetch();
     }
 }

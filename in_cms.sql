@@ -10,11 +10,10 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2016-12-29 17:50:10
+Date: 2017-01-03 18:10:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
 
 -- ----------------------------
 -- Table structure for t_article
@@ -107,6 +106,24 @@ INSERT INTO `t_column` VALUES ('1', '0', '测试分类', '', '', '', '', '', '1'
 INSERT INTO `t_column` VALUES ('2', '0', '栏目1', '栏目1', '<p>栏目1</p>', '', 'fa fa-home', '', '1', '0');
 
 -- ----------------------------
+-- Table structure for t_link
+-- ----------------------------
+DROP TABLE IF EXISTS `t_link`;
+CREATE TABLE `t_link` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '链接名称',
+  `link` varchar(255) DEFAULT '' COMMENT '链接地址',
+  `image` varchar(255) DEFAULT '' COMMENT '链接图片',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态 1 显示  2 隐藏',
+  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='友情链接表';
+
+-- ----------------------------
+-- Records of t_link
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for t_navbar
 -- ----------------------------
 DROP TABLE IF EXISTS `t_navbar`;
@@ -143,7 +160,43 @@ CREATE TABLE `t_site_config` (
 -- ----------------------------
 -- Records of t_site_config
 -- ----------------------------
-INSERT INTO `t_site_config` VALUES ('1', 'site_config', 'a:7:{s:10:\"site_title\";s:9:\"CMS系统\";s:9:\"seo_title\";s:9:\"SEO标题\";s:11:\"seo_keyword\";s:12:\"SEO关键字\";s:15:\"seo_description\";s:9:\"SEO说明\";s:14:\"site_copyright\";s:12:\"版权信息\";s:8:\"site_icp\";s:12:\"ICP备案号\";s:11:\"site_tongji\";s:12:\"统计代码\";}');
+INSERT INTO `t_site_config` VALUES ('1', 'site_config', 'a:7:{s:10:\"site_title\";s:9:\"CMS系统\";s:9:\"seo_title\";s:9:\"SEO标题\";s:11:\"seo_keyword\";s:12:\"SEO关键字\";s:15:\"seo_description\";s:9:\"SEO说明\";s:14:\"site_copyright\";s:12:\"版权信息\";s:8:\"site_icp\";s:12:\"ICP备案号\";s:11:\"site_tongji\";s:15:\"统计代码aaa\";}');
+
+-- ----------------------------
+-- Table structure for t_slide
+-- ----------------------------
+DROP TABLE IF EXISTS `t_slide`;
+CREATE TABLE `t_slide` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cid` int(10) unsigned NOT NULL COMMENT '分类ID',
+  `name` varchar(50) NOT NULL COMMENT '轮播图名称',
+  `description` varchar(255) DEFAULT '' COMMENT '说明',
+  `link` varchar(255) DEFAULT '' COMMENT '链接',
+  `target` varchar(10) DEFAULT '' COMMENT '打开方式',
+  `image` varchar(255) DEFAULT '' COMMENT '轮播图片',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态  1 显示  0  隐藏',
+  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='轮播图表';
+
+-- ----------------------------
+-- Records of t_slide
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_slide_category
+-- ----------------------------
+DROP TABLE IF EXISTS `t_slide_category`;
+CREATE TABLE `t_slide_category` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL COMMENT '轮播图分类',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='轮播图分类表';
+
+-- ----------------------------
+-- Records of t_slide_category
+-- ----------------------------
+INSERT INTO `t_slide_category` VALUES ('1', '首页轮播');
 
 -- ----------------------------
 -- Table structure for t_sys_menu
@@ -161,7 +214,7 @@ CREATE TABLE `t_sys_menu` (
   `condition` char(100) DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 COMMENT='规则表';
+) ENGINE=MyISAM AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COMMENT='规则表';
 
 -- ----------------------------
 -- Records of t_sys_menu
@@ -217,6 +270,25 @@ INSERT INTO `t_sys_menu` VALUES ('50', 'mgr/AdminUser/save', '保存管理员', 
 INSERT INTO `t_sys_menu` VALUES ('51', 'mgr/AdminUser/edit', '编辑管理员', '1', '0', '18', '', '0', '');
 INSERT INTO `t_sys_menu` VALUES ('52', 'mgr/AdminUser/update', '更新管理员', '1', '0', '18', '', '0', '');
 INSERT INTO `t_sys_menu` VALUES ('53', 'mgr/AdminUser/delete', '删除管理员', '1', '0', '18', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('54', 'mgr/Slide/default', '扩展管理', '1', '1', '0', 'fa fa-wrench', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('55', 'mgr/SlideCategory/index', '轮播分类', '1', '1', '54', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('56', 'mgr/SlideCategory/add', '添加分类', '1', '0', '55', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('57', 'mgr/SlideCategory/save', '保存分类', '1', '0', '55', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('58', 'mgr/SlideCategory/edit', '编辑分类', '1', '0', '55', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('59', 'mgr/SlideCategory/update', '更新分类', '1', '0', '55', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('60', 'mgr/SlideCategory/delete', '删除分类', '1', '0', '55', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('61', 'mgr/Slide/index', '轮播图管理', '1', '1', '54', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('62', 'mgr/Slide/add', '添加轮播', '1', '0', '61', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('63', 'mgr/Slide/save', '保存轮播', '1', '0', '61', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('64', 'mgr/Slide/edit', '编辑轮播', '1', '0', '61', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('65', 'mgr/Slide/update', '更新轮播', '1', '0', '61', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('66', 'mgr/Slide/delete', '删除轮播', '1', '0', '61', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('67', 'mgr/Link/index', '友情链接', '1', '1', '54', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('68', 'mgr/Link/add', '添加链接', '1', '0', '67', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('69', 'mgr/Link/save', '保存链接', '1', '0', '67', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('70', 'mgr/Link/edit', '编辑链接', '1', '0', '67', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('71', 'mgr/Link/update', '更新链接', '1', '0', '67', '', '0', '');
+INSERT INTO `t_sys_menu` VALUES ('72', 'mgr/Link/delete', '删除链接', '1', '0', '67', '', '0', '');
 
 -- ----------------------------
 -- Table structure for t_sys_user
@@ -237,7 +309,7 @@ CREATE TABLE `t_sys_user` (
 -- ----------------------------
 -- Records of t_sys_user
 -- ----------------------------
-INSERT INTO `t_sys_user` VALUES ('1', 'admin', 'b63ddacba6c3835cc1b250c5d9de6ac1', '1', '2016-10-18 15:28:37', '2016-12-28 18:23:03', '127.0.0.1');
+INSERT INTO `t_sys_user` VALUES ('1', 'admin', 'b63ddacba6c3835cc1b250c5d9de6ac1', '1', '2016-10-18 15:28:37', '2016-12-31 11:36:08', '127.0.0.1');
 INSERT INTO `t_sys_user` VALUES ('3', 'hots', '200820e3227815ed1756a6b531e7e0d2', '1', '2016-12-28 19:53:37', null, null);
 
 -- ----------------------------

@@ -1,30 +1,25 @@
 <?php
 namespace app\mgr\controller;
 
-use app\mgr\model\SysMenu as SysMenuModel;
+use app\common\model\AuthRule as AuthRuleModel;
+use app\common\controller\AdminBase;
 use think\Db;
 
 /**
  * 后台菜单
  * Class Menu
- * @package app\mgr\ontroller
+ * @package app\admin\controller
  */
-class Menu extends BaseMgr {
+class Menu extends AdminBase
+{
 
-    protected $sysMenuModel;
+    protected $auth_rule_model;
 
-    protected function _initialize() {
-        parent::_initialize();
-        //初始化模型
-        $this->sysMenuModel = new SysMenuModel();
-    }
-
-    /*=====================================================
-     * 说明:上级菜单 兼 后台菜单管理 by:Simon
-     *====================================================*/
-    public function parentMenuList()
+    protected function _initialize()
     {
-        $admin_menu_list       = $this->sysMenuModel->order(['sort' => 'DESC', 'id' => 'ASC'])->select();
+        parent::_initialize();
+        $this->auth_rule_model = new AuthRuleModel();
+        $admin_menu_list       = $this->auth_rule_model->order(['sort' => 'DESC', 'id' => 'ASC'])->select();
         $admin_menu_level_list = array2level($admin_menu_list);
 
         $this->assign('admin_menu_level_list', $admin_menu_level_list);
@@ -34,36 +29,26 @@ class Menu extends BaseMgr {
      * 后台菜单
      * @return mixed
      */
-    public function index() {
-        $this->parentMenuList();
+    public function index()
+    {
         return $this->fetch();
     }
-
-    public function indexRoot() {
-        $sysRootMenuList      = $this->sysMenuModel->order(['sort' => 'DESC', 'id' => 'ASC'])->where(['pid'=>0])->select();
-        $sysRootMenuLevelList = array2level($sysRootMenuList);
-
-        $this->assign('admin_menu_level_list', null);
-        $this->assign('admin_menu_level_list', $sysRootMenuLevelList);
-        return $this->fetch('index');
-    }
-
 
     /**
      * 添加菜单
      * @param string $pid
      * @return mixed
      */
-    public function add($pid = '') {
-        $this->parentMenuList();
+    public function add($pid = '')
+    {
         return $this->fetch('add', ['pid' => $pid]);
     }
 
     /**
      * 保存菜单
      */
-    public function save() {
-
+    public function save()
+    {
         if ($this->request->isPost()) {
             $data            = $this->request->post();
             $validate_result = $this->validate($data, 'Menu');
@@ -71,7 +56,7 @@ class Menu extends BaseMgr {
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
-                if ($this->sysMenuModel->save($data)) {
+                if ($this->auth_rule_model->save($data)) {
                     $this->success('保存成功');
                 } else {
                     $this->error('保存失败');
@@ -85,9 +70,9 @@ class Menu extends BaseMgr {
      * @param $id
      * @return mixed
      */
-    public function edit($id) {
-        $this->parentMenuList();
-        $admin_menu = $this->sysMenuModel->find($id);
+    public function edit($id)
+    {
+        $admin_menu = $this->auth_rule_model->find($id);
 
         return $this->fetch('edit', ['admin_menu' => $admin_menu]);
     }
@@ -96,7 +81,8 @@ class Menu extends BaseMgr {
      * 更新菜单
      * @param $id
      */
-    public function update($id) {
+    public function update($id)
+    {
         if ($this->request->isPost()) {
             $data            = $this->request->post();
             $validate_result = $this->validate($data, 'Menu');
@@ -104,7 +90,7 @@ class Menu extends BaseMgr {
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
-                if ($this->sysMenuModel->save($data, $id) !== false) {
+                if ($this->auth_rule_model->save($data, $id) !== false) {
                     $this->success('更新成功');
                 } else {
                     $this->error('更新失败');
@@ -117,8 +103,13 @@ class Menu extends BaseMgr {
      * 删除菜单
      * @param $id
      */
-    public function delete($id) {
-        if ($this->sysMenuModel->destroy($id)) {
+    public function delete($id)
+    {
+        $sub_menu = $this->auth_rule_model->where(['pid' => $id])->find();
+        if (!empty($sub_menu)) {
+            $this->error('此菜单下存在子菜单，不可删除');
+        }
+        if ($this->auth_rule_model->destroy($id)) {
             $this->success('删除成功');
         } else {
             $this->error('删除失败');

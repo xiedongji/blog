@@ -1,25 +1,28 @@
 <?php
 namespace app\mgr\controller;
 
-use app\mgr\model\SysUser as SysUserModel;
-use app\mgr\model\AuthGroup as AuthGroupModel;
-use app\mgr\model\AuthGroupAccess as AuthGroupAccessModel;
+use app\common\model\AdminUser as AdminUserModel;
+use app\common\model\AuthGroup as AuthGroupModel;
+use app\common\model\AuthGroupAccess as AuthGroupAccessModel;
+use app\common\controller\AdminBase;
 use think\Config;
 use think\Db;
 
 /**
  * 管理员管理
- * Class SysUser
- * @package app\mgr\controller
+ * Class AdminUser
+ * @package app\admin\controller
  */
-class AdminUser extends BaseMgr {
+class AdminUser extends AdminBase
+{
     protected $admin_user_model;
     protected $auth_group_model;
     protected $auth_group_access_model;
 
-    protected function _initialize() {
+    protected function _initialize()
+    {
         parent::_initialize();
-        $this->admin_user_model        = new SysUserModel();
+        $this->admin_user_model        = new AdminUserModel();
         $this->auth_group_model        = new AuthGroupModel();
         $this->auth_group_access_model = new AuthGroupAccessModel();
     }
@@ -28,8 +31,9 @@ class AdminUser extends BaseMgr {
      * 管理员管理
      * @return mixed
      */
-    public function index() {
-        $admin_user_list = $this->admin_user_model->order('id ASC')->select();
+    public function index()
+    {
+        $admin_user_list = $this->admin_user_model->select();
 
         return $this->fetch('index', ['admin_user_list' => $admin_user_list]);
     }
@@ -38,7 +42,8 @@ class AdminUser extends BaseMgr {
      * 添加管理员
      * @return mixed
      */
-    public function add() {
+    public function add()
+    {
         $auth_group_list = $this->auth_group_model->select();
 
         return $this->fetch('add', ['auth_group_list' => $auth_group_list]);
@@ -48,10 +53,11 @@ class AdminUser extends BaseMgr {
      * 保存管理员
      * @param $group_id
      */
-    public function save($group_id) {
+    public function save($group_id)
+    {
         if ($this->request->isPost()) {
-            $data            = $this->request->post();
-            $validate_result = $this->validate($data, 'SysUser');
+            $data            = $this->request->param();
+            $validate_result = $this->validate($data, 'AdminUser');
 
             if ($validate_result !== true) {
                 $this->error($validate_result);
@@ -74,7 +80,8 @@ class AdminUser extends BaseMgr {
      * @param $id
      * @return mixed
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $admin_user             = $this->admin_user_model->find($id);
         $auth_group_list        = $this->auth_group_model->select();
         $auth_group_access      = $this->auth_group_access_model->where('uid', $id)->find();
@@ -88,18 +95,21 @@ class AdminUser extends BaseMgr {
      * @param $id
      * @param $group_id
      */
-    public function update($id, $group_id) {
+    public function update($id, $group_id)
+    {
         if ($this->request->isPost()) {
-            $data            = $this->request->post();
-            $validate_result = $this->validate($data, 'SysUser');
+            $data            = $this->request->param();
+            $validate_result = $this->validate($data, 'AdminUser');
 
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
-                $admin_user           = $this->admin_user_model->find($id);
+                $admin_user = $this->admin_user_model->find($id);
+
                 $admin_user->id       = $id;
                 $admin_user->username = $data['username'];
                 $admin_user->status   = $data['status'];
+
                 if (!empty($data['password']) && !empty($data['confirm_password'])) {
                     $admin_user->password = md5($data['password'] . Config::get('salt'));
                 }
@@ -119,7 +129,8 @@ class AdminUser extends BaseMgr {
      * 删除管理员
      * @param $id
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         if ($id == 1) {
             $this->error('默认管理员不可删除');
         }

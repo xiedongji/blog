@@ -9,7 +9,7 @@ return [
     // 应用调试模式
     'app_debug'              => true,
     // 应用Trace
-    'app_trace'              => false,
+    'app_trace'              => true,
     // 应用模式状态
     'app_status'             => '',
     // 是否支持多模块
@@ -33,7 +33,7 @@ return [
     // 是否开启多语言
     'lang_switch_on'         => false,
     // 默认全局过滤方法 用逗号分隔多个
-    'default_filter'         => '',
+    'default_filter'         => 'htmlspecialchars',
     // 默认语言
     'default_lang'           => 'zh-cn',
     // 应用类库后缀
@@ -41,12 +41,45 @@ return [
     // 控制器类后缀
     'controller_suffix'      => false,
 
+    // auth配置
+    'auth'    => [
+        // 权限开关
+        'auth_on'           => 1,
+        // 认证方式，1为实时认证；2为登录认证。
+        'auth_type'         => 1,
+        // 用户组数据不带前缀表名
+        'auth_group'        => 'auth_group',
+        // 用户-用户组关系不带前缀表
+        'auth_group_access' => 'auth_group_access',
+        // 权限规则不带前缀表
+        'auth_rule'         => 'auth_rule',
+        // 用户信息不带前缀表
+        'auth_user'         => 'admin_user',
+    ],
+
+    // 全站加密密钥（开发新站点前请修改此项）
+    'salt'    => '1dFlxLhiuLqnUZe9kA',
+
+    // 验证码配置
+    'captcha' => [
+        // 验证码字符集合
+        'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',
+        // 验证码字体大小(px)
+        'fontSize' => 22,
+        // 是否画混淆曲线
+        'useCurve' => true,
+        // 验证码位数
+        'length'   => 4,
+        // 验证成功后是否重置
+        'reset'    => true
+    ],
+
     // +----------------------------------------------------------------------
     // | 模块设置
     // +----------------------------------------------------------------------
 
     // 默认模块名
-    'default_module'         => 'mgr',
+    'default_module'         => 'index',
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     // 默认控制器名
@@ -128,8 +161,14 @@ return [
         'taglib_end'   => '}',
     ],
 
+    // 手机模板开启
+    'mobile_theme' => false,
+
     // 视图输出字符串内容替换
-    'view_replace_str'       => [],
+    'view_replace_str'       => [
+        '__UPLOAD__' => '/uploads'
+    ],
+
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
     'dispatch_error_tmpl'    => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
@@ -193,7 +232,7 @@ return [
         // SESSION_ID的提交变量,解决flash上传跨域
         'var_session_id' => '',
         // SESSION 前缀
-        'prefix'         => 'cms',
+        'prefix'         => 'think',
         // 驱动方式 支持redis memcache memcached
         'type'           => '',
         // 是否自动开启 SESSION

@@ -1,19 +1,22 @@
 <?php
 namespace app\mgr\controller;
 
-use app\mgr\model\User as UserModel;
+use app\common\model\User as UserModel;
+use app\common\controller\AdminBase;
 use think\Config;
 use think\Db;
 
 /**
  * 用户管理
  * Class AdminUser
- * @package app\mgr\controller
+ * @package app\admin\controller
  */
-class User extends BaseMgr {
+class User extends AdminBase
+{
     protected $user_model;
 
-    protected function _initialize() {
+    protected function _initialize()
+    {
         parent::_initialize();
         $this->user_model = new UserModel();
     }
@@ -24,7 +27,8 @@ class User extends BaseMgr {
      * @param int    $page
      * @return mixed
      */
-    public function index($keyword = '', $page = 1) {
+    public function index($keyword = '', $page = 1)
+    {
         $map = [];
         if ($keyword) {
             $map['username|mobile|email'] = ['like', "%{$keyword}%"];
@@ -38,14 +42,16 @@ class User extends BaseMgr {
      * 添加用户
      * @return mixed
      */
-    public function add() {
+    public function add()
+    {
         return $this->fetch();
     }
 
     /**
      * 保存用户
      */
-    public function save() {
+    public function save()
+    {
         if ($this->request->isPost()) {
             $data            = $this->request->post();
             $validate_result = $this->validate($data, 'User');
@@ -68,7 +74,8 @@ class User extends BaseMgr {
      * @param $id
      * @return mixed
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $user = $this->user_model->find($id);
 
         return $this->fetch('edit', ['user' => $user]);
@@ -78,7 +85,8 @@ class User extends BaseMgr {
      * 更新用户
      * @param $id
      */
-    public function update($id) {
+    public function update($id)
+    {
         if ($this->request->isPost()) {
             $data            = $this->request->post();
             $validate_result = $this->validate($data, 'User');
@@ -108,7 +116,8 @@ class User extends BaseMgr {
      * 删除用户
      * @param $id
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         if ($this->user_model->destroy($id)) {
             $this->success('删除成功');
         } else {
