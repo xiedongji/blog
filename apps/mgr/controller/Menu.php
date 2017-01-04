@@ -1,8 +1,8 @@
 <?php
 namespace app\mgr\controller;
 
-use app\common\model\AuthRule as AuthRuleModel;
-use app\common\controller\AdminBase;
+use app\common\model\SysMenu as SysMenuModel;
+use app\common\controller\MgrBase;
 use think\Db;
 
 /**
@@ -10,16 +10,16 @@ use think\Db;
  * Class Menu
  * @package app\admin\controller
  */
-class Menu extends AdminBase
+class Menu extends MgrBase
 {
 
-    protected $auth_rule_model;
+    protected $sys_menu_model;
 
     protected function _initialize()
     {
         parent::_initialize();
-        $this->auth_rule_model = new AuthRuleModel();
-        $admin_menu_list       = $this->auth_rule_model->order(['sort' => 'DESC', 'id' => 'ASC'])->select();
+        $this->sys_menu_model  = new SysMenuModel();
+        $admin_menu_list       = $this->sys_menu_model->order(['sort' => 'DESC', 'id' => 'ASC'])->select();
         $admin_menu_level_list = array2level($admin_menu_list);
 
         $this->assign('admin_menu_level_list', $admin_menu_level_list);
@@ -56,7 +56,7 @@ class Menu extends AdminBase
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
-                if ($this->auth_rule_model->save($data)) {
+                if ($this->sys_menu_model->save($data)) {
                     $this->success('保存成功');
                 } else {
                     $this->error('保存失败');
@@ -72,7 +72,7 @@ class Menu extends AdminBase
      */
     public function edit($id)
     {
-        $admin_menu = $this->auth_rule_model->find($id);
+        $admin_menu = $this->sys_menu_model->find($id);
 
         return $this->fetch('edit', ['admin_menu' => $admin_menu]);
     }
@@ -90,7 +90,7 @@ class Menu extends AdminBase
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
-                if ($this->auth_rule_model->save($data, $id) !== false) {
+                if ($this->sys_menu_model->save($data, $id) !== false) {
                     $this->success('更新成功');
                 } else {
                     $this->error('更新失败');
@@ -105,11 +105,11 @@ class Menu extends AdminBase
      */
     public function delete($id)
     {
-        $sub_menu = $this->auth_rule_model->where(['pid' => $id])->find();
+        $sub_menu = $this->sys_menu_model->where(['pid' => $id])->find();
         if (!empty($sub_menu)) {
             $this->error('此菜单下存在子菜单，不可删除');
         }
-        if ($this->auth_rule_model->destroy($id)) {
+        if ($this->sys_menu_model->destroy($id)) {
             $this->success('删除成功');
         } else {
             $this->error('删除失败');

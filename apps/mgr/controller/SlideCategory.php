@@ -1,7 +1,7 @@
 <?php
 namespace app\mgr\controller;
 
-use app\common\controller\AdminBase;
+use app\common\controller\MgrBase;
 use think\Db;
 
 /**
@@ -9,7 +9,7 @@ use think\Db;
  * Class SlideCategory
  * @package app\admin\controller
  */
-class SlideCategory extends AdminBase
+class SlideCategory extends MgrBase
 {
     protected function _initialize()
     {

@@ -2,7 +2,7 @@
 namespace app\mgr\controller;
 
 use app\common\model\Link as LinkModel;
-use app\common\controller\AdminBase;
+use app\common\controller\MgrBase;
 use think\Db;
 
 /**
@@ -10,7 +10,7 @@ use think\Db;
  * Class Link
  * @package app\admin\controller
  */
-class Link extends AdminBase
+class Link extends MgrBase
 {
     protected $link_model;
 

@@ -24,7 +24,7 @@ class HomeBase extends Controller
         if (Cache::has('site_config')) {
             $site_config = Cache::get('site_config');
         } else {
-            $site_config = Db::name('system')->field('value')->where('name', 'site_config')->find();
+            $site_config = Db::name('site_config')->field('value')->where('name', 'site_config')->find();
             $site_config = unserialize($site_config['value']);
             Cache::set('site_config', $site_config);
         }
@@ -37,17 +37,17 @@ class HomeBase extends Controller
      */
     protected function getNav()
     {
-        if (Cache::has('nav')) {
-            $nav = Cache::get('nav');
+        if (Cache::has('navbar')) {
+            $navbar = Cache::get('navbar');
         } else {
-            $nav = Db::name('nav')->where(['status' => 1])->order(['sort' => 'ASC'])->select();
-            $nav = !empty($nav) ? array2tree($nav) : [];
-            if (!empty($nav)) {
-                Cache::set('nav', $nav);
+            $navbar = Db::name('navbar')->where(['status' => 1])->order(['sort' => 'ASC'])->select();
+            $navbar = !empty($navbar) ? array2tree($navbar) : [];
+            if (!empty($navbar)) {
+                Cache::set('navbar', $navbar);
             }
         }
 
-        $this->assign('nav', $nav);
+        $this->assign('navbar', $navbar);
     }
 
     /**

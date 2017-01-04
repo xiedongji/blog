@@ -38,19 +38,19 @@ class Login extends Controller
                 $where['username'] = $data['username'];
                 $where['password'] = md5($data['password'] . Config::get('salt'));
 
-                $admin_user = Db::name('admin_user')->field('id,username,status')->where($where)->find();
+                $sys_user = Db::name('sys_user')->field('id,username,status')->where($where)->find();
 
-                if (!empty($admin_user)) {
-                    if ($admin_user['status'] != 1) {
+                if (!empty($sys_user)) {
+                    if ($sys_user['status'] != 1) {
                         $this->error('当前用户已禁用');
                     } else {
-                        Session::set('admin_id', $admin_user['id']);
-                        Session::set('admin_name', $admin_user['username']);
-                        Db::name('admin_user')->update(
+                        Session::set('admin_id', $sys_user['id']);
+                        Session::set('admin_name', $sys_user['username']);
+                        Db::name('sys_user')->update(
                             [
                                 'last_login_time' => date('Y-m-d H:i:s', time()),
                                 'last_login_ip'   => $this->request->ip(),
-                                'id'              => $admin_user['id']
+                                'id'              => $sys_user['id']
                             ]
                         );
                         $this->success('登录成功', 'mgr/index/index');

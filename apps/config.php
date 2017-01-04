@@ -54,11 +54,11 @@ return [
         // 权限规则不带前缀表
         'auth_rule'         => 'auth_rule',
         // 用户信息不带前缀表
-        'auth_user'         => 'admin_user',
+        'auth_user'         => 'sys_user',
     ],
 
     // 全站加密密钥（开发新站点前请修改此项）
-    'salt'    => '1dFlxLhiuLqnUZe9kA',
+    'salt'    => '1dFlxLUZe9kA',
 
     // 验证码配置
     'captcha' => [

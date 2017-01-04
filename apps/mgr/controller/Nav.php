@@ -1,8 +1,8 @@
 <?php
 namespace app\mgr\controller;
 
-use app\common\model\Nav as NavModel;
-use app\common\controller\AdminBase;
+use app\common\model\Navbar as NavbarModel;
+use app\common\controller\MgrBase;
 use think\Db;
 
 /**
@@ -10,7 +10,7 @@ use think\Db;
  * Class Nav
  * @package app\admin\controller
  */
-class Nav extends AdminBase
+class Nav extends MgrBase
 {
 
     protected $nav_model;
@@ -18,7 +18,7 @@ class Nav extends AdminBase
     protected function _initialize()
     {
         parent::_initialize();
-        $this->nav_model = new NavModel();
+        $this->nav_model = new NavbarModel();
         $nav_list        = $this->nav_model->order(['sort' => 'ASC', 'id' => 'ASC'])->select();
         $nav_level_list  = array2level($nav_list);
 
@@ -51,7 +51,7 @@ class Nav extends AdminBase
     {
         if ($this->request->isPost()) {
             $data            = $this->request->post();
-            $validate_result = $this->validate($data, 'Nav');
+            $validate_result = $this->validate($data, 'Navbar');
 
             if ($validate_result !== true) {
                 $this->error($validate_result);
@@ -85,7 +85,7 @@ class Nav extends AdminBase
     {
         if ($this->request->isPost()) {
             $data            = $this->request->post();
-            $validate_result = $this->validate($data, 'Nav');
+            $validate_result = $this->validate($data, 'Navbar');
 
             if ($validate_result !== true) {
                 $this->error($validate_result);

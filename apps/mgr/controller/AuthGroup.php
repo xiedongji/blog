@@ -2,24 +2,24 @@
 namespace app\mgr\controller;
 
 use app\common\model\AuthGroup as AuthGroupModel;
-use app\common\model\AuthRule as AuthRuleModel;
-use app\common\controller\AdminBase;
+use app\common\model\SysMenu as SysMenuModel;
+use app\common\controller\MgrBase;
 
 /**
  * 权限组
  * Class AuthGroup
  * @package app\admin\controller
  */
-class AuthGroup extends AdminBase
+class AuthGroup extends MgrBase
 {
     protected $auth_group_model;
-    protected $auth_rule_model;
+    protected $sys_menu_model;
 
     protected function _initialize()
     {
         parent::_initialize();
         $this->auth_group_model = new AuthGroupModel();
-        $this->auth_rule_model  = new AuthRuleModel();
+        $this->sys_menu_model  = new SysMenuModel();
     }
 
     /**
@@ -125,7 +125,7 @@ class AuthGroup extends AdminBase
     {
         $auth_group_data = $this->auth_group_model->find($id)->toArray();
         $auth_rules      = explode(',', $auth_group_data['rules']);
-        $auth_rule_list  = $this->auth_rule_model->field('id,pid,title')->select();
+        $auth_rule_list  = $this->sys_menu_model->field('id,pid,title')->select();
 
         foreach ($auth_rule_list as $key => $value) {
             in_array($value['id'], $auth_rules) && $auth_rule_list[$key]['checked'] = true;

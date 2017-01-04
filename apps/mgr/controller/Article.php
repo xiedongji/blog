@@ -2,26 +2,26 @@
 namespace app\mgr\controller;
 
 use app\common\model\Article as ArticleModel;
-use app\common\model\Category as CategoryModel;
-use app\common\controller\AdminBase;
+use app\common\model\Column as ColumnModel;
+use app\common\controller\MgrBase;
 
 /**
  * 文章管理
  * Class Article
  * @package app\admin\controller
  */
-class Article extends AdminBase
+class Article extends MgrBase
 {
     protected $article_model;
-    protected $category_model;
+    protected $column_model;
 
     protected function _initialize()
     {
         parent::_initialize();
-        $this->article_model  = new ArticleModel();
-        $this->category_model = new CategoryModel();
+        $this->article_model = new ArticleModel();
+        $this->column_model  = new ColumnModel();
 
-        $category_level_list = $this->category_model->getLevelList();
+        $category_level_list = $this->column_model->getLevelList();
         $this->assign('category_level_list', $category_level_list);
     }
 
@@ -38,7 +38,7 @@ class Article extends AdminBase
         $field = 'id,title,cid,author,reading,status,publish_time,sort';
 
         if ($cid > 0) {
-            $category_children_ids = $this->category_model->where(['path' => ['like', "%,{$cid},%"]])->column('id');
+            $category_children_ids = $this->column_model->where(['path' => ['like', "%,{$cid},%"]])->column('id');
             $category_children_ids = (!empty($category_children_ids) && is_array($category_children_ids)) ? implode(',', $category_children_ids) . ',' . $cid : $cid;
             $map['cid']            = ['IN', $category_children_ids];
         }
@@ -48,7 +48,7 @@ class Article extends AdminBase
         }
 
         $article_list  = $this->article_model->field($field)->where($map)->order(['publish_time' => 'DESC'])->paginate(15, false, ['page' => $page]);
-        $category_list = $this->category_model->column('name', 'id');
+        $category_list = $this->column_model->column('name', 'id');
 
         return $this->fetch('index', ['article_list' => $article_list, 'category_list' => $category_list, 'cid' => $cid, 'keyword' => $keyword]);
     }

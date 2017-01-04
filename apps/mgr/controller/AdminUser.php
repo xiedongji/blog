@@ -1,28 +1,28 @@
 <?php
 namespace app\mgr\controller;
 
-use app\common\model\AdminUser as AdminUserModel;
+use app\common\model\SysUser as SysUserModel;
 use app\common\model\AuthGroup as AuthGroupModel;
 use app\common\model\AuthGroupAccess as AuthGroupAccessModel;
-use app\common\controller\AdminBase;
+use app\common\controller\MgrBase;
 use think\Config;
 use think\Db;
 
 /**
  * 管理员管理
- * Class AdminUser
+ * Class SysUser
  * @package app\admin\controller
  */
-class AdminUser extends AdminBase
+class AdminUser extends MgrBase
 {
-    protected $admin_user_model;
+    protected $sys_user_model;
     protected $auth_group_model;
     protected $auth_group_access_model;
 
     protected function _initialize()
     {
         parent::_initialize();
-        $this->admin_user_model        = new AdminUserModel();
+        $this->sys_user_model          = new SysUserModel();
         $this->auth_group_model        = new AuthGroupModel();
         $this->auth_group_access_model = new AuthGroupAccessModel();
     }
@@ -33,7 +33,7 @@ class AdminUser extends AdminBase
      */
     public function index()
     {
-        $admin_user_list = $this->admin_user_model->select();
+        $admin_user_list = $this->sys_user_model->select();
 
         return $this->fetch('index', ['admin_user_list' => $admin_user_list]);
     }
@@ -57,14 +57,14 @@ class AdminUser extends AdminBase
     {
         if ($this->request->isPost()) {
             $data            = $this->request->param();
-            $validate_result = $this->validate($data, 'AdminUser');
+            $validate_result = $this->validate($data, 'SysUser');
 
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
                 $data['password'] = md5($data['password'] . Config::get('salt'));
-                if ($this->admin_user_model->allowField(true)->save($data)) {
-                    $auth_group_access['uid']      = $this->admin_user_model->id;
+                if ($this->sys_user_model->allowField(true)->save($data)) {
+                    $auth_group_access['uid']      = $this->sys_user_model->id;
                     $auth_group_access['group_id'] = $group_id;
                     $this->auth_group_access_model->save($auth_group_access);
                     $this->success('保存成功');
@@ -82,7 +82,7 @@ class AdminUser extends AdminBase
      */
     public function edit($id)
     {
-        $admin_user             = $this->admin_user_model->find($id);
+        $admin_user             = $this->sys_user_model->find($id);
         $auth_group_list        = $this->auth_group_model->select();
         $auth_group_access      = $this->auth_group_access_model->where('uid', $id)->find();
         $admin_user['group_id'] = $auth_group_access['group_id'];
@@ -99,12 +99,12 @@ class AdminUser extends AdminBase
     {
         if ($this->request->isPost()) {
             $data            = $this->request->param();
-            $validate_result = $this->validate($data, 'AdminUser');
+            $validate_result = $this->validate($data, 'SysUser');
 
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
-                $admin_user = $this->admin_user_model->find($id);
+                $admin_user = $this->sys_user_model->find($id);
 
                 $admin_user->id       = $id;
                 $admin_user->username = $data['username'];
@@ -134,7 +134,7 @@ class AdminUser extends AdminBase
         if ($id == 1) {
             $this->error('默认管理员不可删除');
         }
-        if ($this->admin_user_model->destroy($id)) {
+        if ($this->sys_user_model->destroy($id)) {
             $this->auth_group_access_model->where('uid', $id)->delete();
             $this->success('删除成功');
         } else {

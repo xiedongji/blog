@@ -1,7 +1,7 @@
 <?php
 namespace app\mgr\controller;
 
-use app\common\controller\AdminBase;
+use app\common\controller\MgrBase;
 use think\Cache;
 use think\Db;
 
@@ -10,7 +10,7 @@ use think\Db;
  * Class System
  * @package app\admin\controller
  */
-class System extends AdminBase
+class System extends MgrBase
 {
     public function _initialize()
     {
@@ -22,7 +22,7 @@ class System extends AdminBase
      */
     public function siteConfig()
     {
-        $site_config = Db::name('system')->field('value')->where('name', 'site_config')->find();
+        $site_config = Db::name('site_config')->field('value')->where('name', 'site_config')->find();
         $site_config = unserialize($site_config['value']);
 
         return $this->fetch('site_config', ['site_config' => $site_config]);
@@ -37,7 +37,7 @@ class System extends AdminBase
             $site_config                = $this->request->post('site_config/a');
             $site_config['site_tongji'] = htmlspecialchars_decode($site_config['site_tongji']);
             $data['value']              = serialize($site_config);
-            if (Db::name('system')->where('name', 'site_config')->update($data) !== false) {
+            if (Db::name('site_config')->where('name', 'site_config')->update($data) !== false) {
                 $this->success('提交成功');
             } else {
                 $this->error('提交失败');

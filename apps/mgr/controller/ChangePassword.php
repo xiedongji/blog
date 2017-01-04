@@ -1,7 +1,7 @@
 <?php
 namespace app\mgr\controller;
 
-use app\common\controller\AdminBase;
+use app\common\controller\MgrBase;
 use think\Config;
 use think\Db;
 use think\Session;
@@ -11,7 +11,7 @@ use think\Session;
  * Class ChangePassword
  * @package app\admin\controller
  */
-class ChangePassword extends AdminBase
+class ChangePassword extends MgrBase
 {
     /**
      * 修改密码
@@ -30,12 +30,12 @@ class ChangePassword extends AdminBase
         if ($this->request->isPost()) {
             $admin_id    = Session::get('admin_id');
             $data   = $this->request->param();
-            $result = Db::name('admin_user')->find($admin_id);
+            $result = Db::name('sys_user')->find($admin_id);
 
             if ($result['password'] == md5($data['old_password'] . Config::get('salt'))) {
                 if ($data['password'] == $data['confirm_password']) {
                     $new_password = md5($data['password'] . Config::get('salt'));
-                    $res          = Db::name('admin_user')->where(['id' => $admin_id])->setField('password', $new_password);
+                    $res          = Db::name('sys_user')->where(['id' => $admin_id])->setField('password', $new_password);
 
                     if ($res !== false) {
                         $this->success('修改成功');

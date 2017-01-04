@@ -3,7 +3,7 @@ namespace app\mgr\validate;
 
 use think\Validate;
 
-class Category extends Validate
+class Column extends Validate
 {
     protected $rule = [
         'pid'  => 'require',

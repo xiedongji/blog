@@ -2,7 +2,7 @@
 namespace app\mgr\controller;
 
 use app\common\model\User as UserModel;
-use app\common\controller\AdminBase;
+use app\common\controller\MgrBase;
 use think\Config;
 use think\Db;
 
@@ -11,7 +11,7 @@ use think\Db;
  * Class AdminUser
  * @package app\admin\controller
  */
-class User extends AdminBase
+class User extends MgrBase
 {
     protected $user_model;
 
