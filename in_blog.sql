@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-01-03 18:09:34
+Date: 2017-01-04 15:06:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,7 +35,7 @@ CREATE TABLE `t_article` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `publish_time` datetime NOT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='文章表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文章表';
 
 -- ----------------------------
 -- Records of t_article
@@ -51,7 +51,7 @@ CREATE TABLE `t_auth_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `rules` varchar(255) NOT NULL COMMENT '权限规则ID',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='权限组表';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='权限组表';
 
 -- ----------------------------
 -- Records of t_auth_group
@@ -94,7 +94,7 @@ CREATE TABLE `t_column` (
   `path` varchar(255) DEFAULT '' COMMENT '路径',
   `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='分类表';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='分类表';
 
 -- ----------------------------
 -- Records of t_column
@@ -113,11 +113,12 @@ CREATE TABLE `t_link` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态 1 显示  2 隐藏',
   `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='友情链接表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='友情链接表';
 
 -- ----------------------------
 -- Records of t_link
 -- ----------------------------
+INSERT INTO `t_link` VALUES ('1', 'tset', 'aaaaa', '/uploads/20170104/2080fefdc3a2394ad7845aa7c817f199.png', '1', '0');
 
 -- ----------------------------
 -- Table structure for t_navbar
@@ -134,11 +135,12 @@ CREATE TABLE `t_navbar` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态  0 隐藏  1 显示',
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='导航表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='导航表';
 
 -- ----------------------------
 -- Records of t_navbar
 -- ----------------------------
+INSERT INTO `t_navbar` VALUES ('1', '0', '33', 'aaaa', 'aaa', 'aaaa', '_self', '1', '0');
 
 -- ----------------------------
 -- Table structure for t_site_config
@@ -154,7 +156,7 @@ CREATE TABLE `t_site_config` (
 -- ----------------------------
 -- Records of t_site_config
 -- ----------------------------
-INSERT INTO `t_site_config` VALUES ('1', 'site_config', 'a:7:{s:10:\"site_title\";s:30:\"Think Admin 后台管理系统\";s:9:\"seo_title\";s:0:\"\";s:11:\"seo_keyword\";s:0:\"\";s:15:\"seo_description\";s:0:\"\";s:14:\"site_copyright\";s:0:\"\";s:8:\"site_icp\";s:0:\"\";s:11:\"site_tongji\";s:0:\"\";}');
+INSERT INTO `t_site_config` VALUES ('1', 'site_config', 'a:7:{s:10:\"site_title\";s:25:\"加上消息 管理系统\";s:9:\"seo_title\";s:4:\"test\";s:11:\"seo_keyword\";s:0:\"\";s:15:\"seo_description\";s:0:\"\";s:14:\"site_copyright\";s:0:\"\";s:8:\"site_icp\";s:0:\"\";s:11:\"site_tongji\";s:0:\"\";}');
 
 -- ----------------------------
 -- Table structure for t_slide
@@ -185,12 +187,13 @@ CREATE TABLE `t_slide_category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL COMMENT '轮播图分类',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='轮播图分类表';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='轮播图分类表';
 
 -- ----------------------------
 -- Records of t_slide_category
 -- ----------------------------
 INSERT INTO `t_slide_category` VALUES ('1', '首页轮播');
+INSERT INTO `t_slide_category` VALUES ('2', 'df');
 
 -- ----------------------------
 -- Table structure for t_sys_menu
@@ -208,7 +211,7 @@ CREATE TABLE `t_sys_menu` (
   `condition` char(100) DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=utf8 COMMENT='规则表';
+) ENGINE=MyISAM AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COMMENT='规则表';
 
 -- ----------------------------
 -- Records of t_sys_menu
@@ -300,12 +303,12 @@ CREATE TABLE `t_sys_user` (
   `last_login_ip` varchar(20) DEFAULT NULL COMMENT '最后登录IP',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='管理员表';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of t_sys_user
 -- ----------------------------
-INSERT INTO `t_sys_user` VALUES ('1', 'admin', '0dfc7612f607db6c17fd99388e9e5f9c', '1', '2016-10-18 15:28:37', '2017-01-03 16:51:44', '127.0.0.1');
+INSERT INTO `t_sys_user` VALUES ('1', 'admin', '9c6af6fa42427109be328512f00c7837', '1', '2016-10-18 15:28:37', '2017-01-04 15:05:31', '127.0.0.1');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -323,8 +326,9 @@ CREATE TABLE `t_user` (
   `last_login_ip` varchar(50) DEFAULT '' COMMENT '最后登录IP',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
+INSERT INTO `t_user` VALUES ('2', 'test', '9c6af6fa42427109be328512f00c7837', '18171810000', '', '1', '2017-01-04 14:36:55', null, '');
