@@ -52,7 +52,7 @@ return [
         // 用户-用户组关系不带前缀表
         'auth_group_access' => 'auth_group_access',
         // 权限规则不带前缀表
-        'auth_rule'         => 'auth_rule',
+        'auth_rule'         => 'sys_menu',
         // 用户信息不带前缀表
         'auth_user'         => 'sys_user',
     ],

@@ -45,11 +45,11 @@ class MgrBase extends Controller
         $not_check = ['mgr/Index/index', 'mgr/AuthGroup/getjson', 'mgr/System/clear'];
 
         if (!in_array($module . '/' . $controller . '/' . $action, $not_check)) {
-            // $auth     = new Auth();
+            $auth     = new Auth();
             $admin_id = Session::get('admin_id');
-            // if (!$auth->check($module . '/' . $controller . '/' . $action, $admin_id) && $admin_id != 1) {
-                // $this->error('没有权限');
-            // }
+            if (!$auth->check($module . '/' . $controller . '/' . $action, $admin_id) && $admin_id != 1) {
+                $this->error('没有权限');
+            }
         }
     }
 
@@ -65,9 +65,9 @@ class MgrBase extends Controller
         $auth_rule_list = Db::name('sys_menu')->where('status', 1)->order(['sort' => 'DESC', 'id' => 'ASC'])->select();
 
         foreach ($auth_rule_list as $value) {
-            // if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
+            if ($auth->check($value['name'], $admin_id) || $admin_id == 1) {
                 $menu[] = $value;
-            // }
+            }
         }
         $menu = !empty($menu) ? array2tree($menu) : [];
 
