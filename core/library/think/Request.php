@@ -1148,6 +1148,7 @@ class Request
         if (is_string($name)) {
             $name = explode(',', $name);
         }
+
         $item = [];
         foreach ($name as $key) {
             if (isset($param[$key])) {

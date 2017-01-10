@@ -57,6 +57,7 @@ class ApiBase extends Controller
     {
         if (Cache::has('slide')) {
             $slide = Cache::get('slide');
+
         } else {
             $slide = Db::name('slide')->where(['status' => 1, 'cid' => 1])->order(['sort' => 'DESC'])->select();
             if (!empty($slide)) {

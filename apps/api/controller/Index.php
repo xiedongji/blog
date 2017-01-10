@@ -10,6 +10,7 @@ namespace app\api\controller;
 
 use app\common\controller\ApiBase;
 use think\Db;
+use think\Config;
 
 class Index extends ApiBase
 {
@@ -19,6 +20,7 @@ class Index extends ApiBase
      *====================================================*/
     public function index()
     {
-        echo 'someone';
+        Config::set('default_return_type','html');
+        return $this->fetch();
     }
 }

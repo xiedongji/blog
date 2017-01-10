@@ -55,6 +55,7 @@ class Login extends Controller
                         );
                         $this->success('登录成功', 'mgr/index/index');
                     }
+
                 } else {
                     $this->error('用户名或密码错误');
                 }
